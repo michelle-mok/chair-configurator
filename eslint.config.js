@@ -7,6 +7,10 @@ export default defineConfig({
     ignores: ['eslint.config.js', 'vite.config.ts'],
     files: ['**/*.{js,ts}'],
     extends: [js.configs.recommended, tseslint.configs.recommendedTypeChecked, prettier],
+    rules: {
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/no-unsafe-argument': 'off',
+    },
     languageOptions: {
         parserOptions: {
             projectService: {
