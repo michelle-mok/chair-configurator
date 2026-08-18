@@ -7,6 +7,9 @@ import type { ConfiguratorState } from '../state/ConfiguratorStore';
 const ENVIRONMENT_INTENSITY = 0.5;
 const BACKGROUND_COLOR = new THREE.Color(0xfaf9f6);
 const MODEL_URL = '/models/SheenChair.glb';
+const CHAIR_SHADOW_URL = '/textures/chair-shadow.png';
+const PLANE_SIZE = 3;
+const Y_OFFSET = 0.001;
 
 export class World {
     readonly instance = new THREE.Scene();
@@ -17,6 +20,22 @@ export class World {
     constructor() {
         this.instance.environmentIntensity = ENVIRONMENT_INTENSITY;
         this.instance.background = BACKGROUND_COLOR;
+
+        const textureLoader = new THREE.TextureLoader();
+        const shadowTexture = textureLoader.load(CHAIR_SHADOW_URL);
+
+        const geometry = new THREE.PlaneGeometry(PLANE_SIZE, PLANE_SIZE);
+        const material = new THREE.MeshBasicMaterial({ 
+            color: 0x000000,
+            alphaMap: shadowTexture,
+            transparent: true,
+            depthWrite: false
+        });
+        const plane = new THREE.Mesh(geometry, material);
+        plane.rotation.x = -Math.PI / 2;
+        plane.position.y = Y_OFFSET;
+        this.instance.add(plane);
+        this.disposables.push(geometry, material, shadowTexture);
     }
 
     async load(assetLoader: AssetLoader, onProgress?: ProgressCallback): Promise<void> {
