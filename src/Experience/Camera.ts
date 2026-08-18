@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 const FOV = 35;
-const START_POSITION = new THREE.Vector3(0, 0, 5);
+const START_POSITION = new THREE.Vector3(1.5, 1, 2);
 const NEAR = 0.1;
 const FAR = 100;
 
