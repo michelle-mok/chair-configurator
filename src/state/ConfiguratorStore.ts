@@ -5,7 +5,7 @@ export type ConfiguratorState = Record<CategoryId, OptionId>;
 const BASE_PRICE = 50;
 
 export class ConfiguratorStore {
-    private state: ConfiguratorState = {
+   private state: ConfiguratorState = {
         'fabric': 'mango-velvet',
         'wood': 'brown',
     }

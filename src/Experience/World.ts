@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { CHAIR_PART_NAMES, PRODUCT_CATEGORIES, type ChairPartName, type OptionId } from '../config/productConfig';
 import type { AssetLoader, ProgressCallback } from './AssetLoader';
+import type { ConfiguratorState } from '../state/ConfiguratorStore';
 
 // roomEnvironment overexposes at 1.0
 const ENVIRONMENT_INTENSITY = 0.5;
@@ -81,6 +82,20 @@ export class World {
 
     setEnvironment(texture: THREE.Texture): void {
         this.instance.environment = texture;
+    }
+
+    applyConfiguration(state: Readonly<ConfiguratorState>): void {
+        for (const category of PRODUCT_CATEGORIES) {
+            
+            const mesh = this.partMap.get(category.part);
+            if(!mesh) continue;
+
+            const selectedOptionId = state[category.id];
+            const material = this.optionMaterials.get(selectedOptionId);
+            if(!material) continue;
+
+            mesh.material = material;
+        }
     }
 
     dispose(): void {

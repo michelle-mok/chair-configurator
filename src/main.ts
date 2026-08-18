@@ -1,6 +1,12 @@
 import { Experience } from "./Experience/Experience";
+import { LoadingOverlay } from "./ui/LoadingOverlay";
 
 const canvas = document.querySelector<HTMLCanvasElement>('#webgl');
 if (!canvas) throw new Error('canvas #webgl not found');
 
-new Experience(canvas);
+const overlay = new LoadingOverlay(document.body);
+const experience = new Experience(canvas, {
+    onLoadProgress: (ratio) => overlay.setProgress(ratio),
+    onLoadComplete: () => overlay.dispose(),
+    onLoadError: () => overlay.showError('Could not load model'),
+});

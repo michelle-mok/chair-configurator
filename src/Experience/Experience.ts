@@ -7,6 +7,13 @@ import { Loop } from "./Loop";
 import { AssetLoader } from "./AssetLoader";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import * as THREE from 'three';
+import { ConfiguratorStore } from "../state/ConfiguratorStore";
+
+export interface ExperienceCallbacks {
+    onLoadProgress?: (ratio: number) => void;
+    onLoadComplete?: () => void;
+    onLoadError?: (error: unknown) => void;
+}
 
 export class Experience {
     private readonly sizes: Sizes;
@@ -17,17 +24,31 @@ export class Experience {
     private readonly controls: Controls;
     private readonly loop: Loop;
     private readonly assetLoader: AssetLoader;
+    readonly store: ConfiguratorStore;
+    private unsubscribe: (() => void) | null = null;
 
-    constructor(canvas: HTMLCanvasElement) {
+    constructor(canvas: HTMLCanvasElement, callbacks: ExperienceCallbacks = {}) {
         this.sizes = new Sizes(() => {
             this.camera.resize(this.sizes.width / this.sizes.height);
             this.renderer.resize(this.sizes);
         });
         this.assetLoader = new AssetLoader();
+        this.store = new ConfiguratorStore();
         this.world = new World();
         void this.world
-            .load(this.assetLoader)
-            .catch((error: unknown) => console.error('Experience: model load failed', error));
+            .load(this.assetLoader, callbacks.onLoadProgress)
+            .then(() => {
+                this.world.applyConfiguration(this.store.getState());
+                this.unsubscribe = this.store.subscribe(() => {
+                    this.world.applyConfiguration(this.store.getState());
+                })
+                callbacks.onLoadComplete?.()
+
+            })
+            .catch((error: unknown) => {
+                console.error('Experience: model load failed', error);
+                callbacks.onLoadError?.(error);
+            });
         this.camera = new Camera(this.sizes.width / this.sizes.height);
         this.renderer = new Renderer(canvas, this.sizes);
 
@@ -55,6 +76,9 @@ export class Experience {
     }
 
     dispose(): void {
+        if (this.unsubscribe) {
+            this.unsubscribe();
+        }
         this.loop.dispose();
         this.world.dispose();
         this.assetLoader.dispose();
