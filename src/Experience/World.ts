@@ -1,16 +1,17 @@
 import * as THREE from 'three';
-import { CHAIR_PART_NAMES, type ChairPartName } from '../config/productConfig';
+import { CHAIR_PART_NAMES, PRODUCT_CATEGORIES, type ChairPartName, type OptionId } from '../config/productConfig';
 import type { AssetLoader, ProgressCallback } from './AssetLoader';
 
 // roomEnvironment overexposes at 1.0
 const ENVIRONMENT_INTENSITY = 0.5;
 const BACKGROUND_COLOR = new THREE.Color(0xfaf9f6);
-const MODEL_URL = './models/SheenChair.glb';
+const MODEL_URL = '/models/SheenChair.glb';
 
 export class World {
     readonly instance = new THREE.Scene();
     private readonly disposables: { dispose(): void }[] = [];
     private readonly partMap = new Map<ChairPartName, THREE.Mesh>();
+    private readonly optionMaterials = new Map<OptionId, THREE.Material>();
 
     constructor() {
         this.instance.environmentIntensity = ENVIRONMENT_INTENSITY;
@@ -45,9 +46,33 @@ export class World {
         for (const [key, value] of incoming) {
             this.partMap.set(key, value);
         };
+        this.buildOptionMaterials(incomingDisposables);
         for (const d of incomingDisposables) this.disposables.push(d);
-
         this.instance.add(gltf.scene);
+    }
+
+    private buildOptionMaterials(disposables: { dispose(): void }[]): void {
+        this.optionMaterials.clear();
+
+        for (const category of PRODUCT_CATEGORIES) {
+            const mesh = this.partMap.get(category.part);
+
+            if(!mesh) continue;
+                
+            const template = Array.isArray(mesh.material) ? mesh.material[0] : mesh.material;
+            for (const option of category.options) {
+                const material = template.clone();
+                if ('color' in material && material.color instanceof THREE.Color) {
+                    material.color.set(option.color);
+                }
+                if ('map' in material) material.map = null;
+                if ('sheenColor' in material && material.sheenColor instanceof THREE.Color) {
+                    material.sheenColor.set(option.color);
+                }
+                this.optionMaterials.set(option.id, material);
+                disposables.push(material);
+            }
+        }
     }
 
     update(_delta: number): void {
