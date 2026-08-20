@@ -36,19 +36,69 @@
             }
             
             .loading-overlay__bar {
-            width: 200px;
-            height: 6px;
-            background: #ddd;
-            border-radius: 3px;
-            overflow: hidden;
-            margin-top: 12px;
+                width: 200px;
+                height: 6px;
+                background: #ddd;
+                border-radius: 3px;
+                overflow: hidden;
+                margin-top: 12px;
             }
 
             .loading-overlay__fill {
-            width: 0%;
-            height: 100%;
-            background: #d4622a;
-            transition: width 200ms ease-out;
+                width: 0%;
+                height: 100%;
+                background: #d4622a;
+                transition: width 200ms ease-out;
+            }
+
+            .configurator-panel {
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 260px;
+                height: 100%;
+                box-sizing: border-box;
+                padding: 24px 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+                background: #ffffff;
+                border-left: 1px solid #e5e2dc;
+                font-family: sans-serif;
+                overflow-y: auto;
+                z-index: 5;
+            }
+
+            .configurator-panel__section {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .configurator-panel__label {
+                font-size: 12px;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: #8a8378;
+            }
+
+            .configurator-panel__button {
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                border: 2px solid transparent;
+                cursor: pointer;
+                padding: 0;
+            }
+
+            .configurator-panel__button--active {
+                border-color: #2c2a26;
+            }
+            
+            .configurator-panel__price {
+                margin-top: auto;
+                font-size: 18px;
+                color: #2c2a26;
             }
         </style>
     </head>

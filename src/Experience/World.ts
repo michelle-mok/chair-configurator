@@ -117,6 +117,10 @@ export class World {
         }
     }
 
+    getPickableMeshes(): THREE.Mesh[] {
+        return [...this.partMap.values()];
+    }
+
     dispose(): void {
         for (const d of this.disposables) d.dispose();
     }
