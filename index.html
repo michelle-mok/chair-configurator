@@ -94,11 +94,23 @@
             .configurator-panel__button--active {
                 border-color: #2c2a26;
             }
-            
+
             .configurator-panel__price {
                 margin-top: auto;
                 font-size: 18px;
                 color: #2c2a26;
+            }
+
+            .configurator-panel__section {
+            /* ...existing rules... */
+                transition: background-color 400ms ease-out;
+                border-radius: 6px;
+                padding: 6px;
+                margin: -6px;
+            }
+
+            .configurator-panel__section--focused {
+                background-color: #f0ece4;
             }
         </style>
     </head>

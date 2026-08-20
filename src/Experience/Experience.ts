@@ -16,6 +16,7 @@ export interface ExperienceCallbacks {
     onLoadComplete?: () => void;
     onLoadError?: (error: unknown) => void;
     onHoverPart?: (categoryId: CategoryId | null) => void;
+    onSelectPart?: (categoryId: CategoryId) => void;
 }
 
 export class Experience {
@@ -63,7 +64,7 @@ export class Experience {
             (partName) => {
                 const categoryId = this.categoryForPart(partName);
                 if (categoryId) {
-                    console.log('selected category: ', categoryId);
+                    callbacks.onSelectPart?.(categoryId);
                 }
             }
         );

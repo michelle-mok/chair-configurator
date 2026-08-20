@@ -14,9 +14,12 @@ const experience = new Experience(canvas, {
     onHoverPart: (categoryId) => {
         canvas.style.cursor = categoryId ? 'pointer' : 'default'
     },
+    onSelectPart: (categoryId) => {
+        configPanel.focusCategory(categoryId);
+    }
 });
 
-const configuratorPanel = new ConfiguratorPanel(document.body, experience.store);
+const configPanel = new ConfiguratorPanel(document.body, experience.store);
 
 
 
