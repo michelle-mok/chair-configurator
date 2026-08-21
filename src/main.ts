@@ -1,6 +1,7 @@
 import { Experience } from "./Experience/Experience";
 import { LoadingOverlay } from "./ui/LoadingOverlay";
 import { ConfiguratorPanel } from "./ui/ConfiguratorPanel";
+import { UrlSync } from "./ui/UrlSync";
 
 const canvas = document.querySelector<HTMLCanvasElement>('#webgl');
 if (!canvas) throw new Error('canvas #webgl not found');
@@ -21,5 +22,5 @@ const experience = new Experience(canvas, {
 
 const configPanel = new ConfiguratorPanel(document.body, experience.store);
 
-
+const urlSync = new UrlSync(experience.store);
 
