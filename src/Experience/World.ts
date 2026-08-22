@@ -49,7 +49,9 @@ export class World {
                     incoming.set(object.name as ChairPartName, object);
                     incomingDisposables.push(object.geometry);
                     const materials = Array.isArray(object.material) ? object.material : [object.material];
-                    for (const material of materials) incomingDisposables.push(material);
+                    console.log(materials);
+                    for (const material of materials) 
+                        incomingDisposables.push(material);
                 } else {
                     console.warn(`World: unexpected object "${object.name}"`)
                 }
@@ -89,6 +91,8 @@ export class World {
                 if ('sheenColor' in material && material.sheenColor instanceof THREE.Color) {
                     material.sheenColor.set(option.color);
                 }
+                if('metalness' in option && 'metalness' in material) material.metalness = option.metalness; 
+                if('roughness' in option && 'roughness' in material) material.roughness = option.roughness; 
                 this.optionMaterials.set(option.id, material);
                 disposables.push(material);
             }

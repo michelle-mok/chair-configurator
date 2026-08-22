@@ -6,6 +6,8 @@ type ProductOption = {
     label: string;
     price: number;
     color: number;
+    roughness?: number;
+    metalness?: number;
 }
 
 type OptionCategory = {
@@ -33,6 +35,21 @@ export const PRODUCT_CATEGORIES = [
         options: [
             { id: 'brown', label: 'Brown', price: 0, color: 0x5c3a21 },
             { id: 'black', label: 'Black', price: 25, color: 0x1a1a1a },
+
+        ]
+    },
+    {
+        id: 'metal',
+        part:'SheenChair_metal',
+        label: 'Metal',
+        options: [
+            { id: 'steel', label: 'Steel', price: 0, color: 0x71797e, metalness: 1, roughness: 0.3
+            },
+            { id: 'grey', label: 'Grey', price: 15, color: 0x3a4247, metalness: 1, roughness: 0.3
+            },
+            { id: 'brass', label: 'Brass', price: 30, color: 0xb5a642, metalness: 1, roughness: 0.3
+            },
+            
         ]
     }
 ] as const satisfies readonly OptionCategory[];

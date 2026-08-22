@@ -8,6 +8,7 @@ export class ConfiguratorStore {
    private state: ConfiguratorState = {
         'fabric': 'mango-velvet',
         'wood': 'brown',
+        'metal': 'steel'
     }
     private readonly listeners: (() => void)[] = [];
     private isNotifying = false;
