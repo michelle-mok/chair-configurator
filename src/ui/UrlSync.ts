@@ -1,5 +1,25 @@
-import { PRODUCT_CATEGORIES } from "../config/productConfig";
+import { PRODUCT_CATEGORIES, type CategoryId, type OptionId } from "../config/productConfig";
 import type { ConfiguratorStore } from "../state/ConfiguratorStore";
+
+export function parseConfigQuery(query: string): [CategoryId, OptionId][] {
+    const configArray: [CategoryId, OptionId][] = [];
+    const params = new URLSearchParams(query);
+
+    for(const [key, value] of params) {
+        const category = PRODUCT_CATEGORIES.find((c) => c.id === key);
+        if(!category) {
+            console.warn(`Ignoring unknown category in URL: ${key}`);
+            continue;
+        }
+        const option = category.options.find((o) => o.id === value);
+        if(!option) {
+            console.warn(`Unknown option in URL: ${value}`);
+            continue;
+        }
+        configArray.push([category.id, option.id]);
+    }
+    return configArray;
+};
 
 export class UrlSync {
     private readonly store:  ConfiguratorStore;
@@ -7,29 +27,14 @@ export class UrlSync {
 
     constructor(store: ConfiguratorStore) {
         this.store = store;
-        this.readUrl();
+
+        for (const [categoryId, optionId] of parseConfigQuery(window.location.search)) {
+            this.store.select(categoryId, optionId);
+        }
         
         this.unsubscribe = store.subscribe(() => {
             this.writeUrl();
         })
-    }
-
-     private readUrl(): void {
-        const params = new URLSearchParams(window.location.search);
-        for(const [key, value] of params) {
-            const category = PRODUCT_CATEGORIES.find((c) => c.id === key);
-            if(!category) {
-                console.warn(`Ignoring unknown category in URL: ${key}`);
-                continue;
-            }
-            const option = category.options.find((o) => o.id === value);
-            if(!option) {
-                console.warn(`Unknown option in URL: ${value}`);
-                continue;
-            }
-
-            this.store.select(category.id, option.id);
-        }
     }
 
     private writeUrl(): void {
