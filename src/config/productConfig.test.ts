@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { PRODUCT_CATEGORIES, CHAIR_PART_NAMES, type OptionId } from './productConfig';
+import { PRODUCT_CATEGORIES, CHAIR_PART_NAMES, type OptionId, type ChairPartName } from './productConfig';
 
 describe('productConfig', () => {
     it('checks that option ids are globally unique', ()  => {
@@ -38,4 +38,14 @@ describe('productConfig', () => {
             expect(optionPrices).toContain(0);
         };
     });
+
+    it('checks that each part name appears in at most 1 category', () => {
+        const partArray: ChairPartName[] = [];
+        for (const category of PRODUCT_CATEGORIES) {
+            partArray.push(category.part);
+        }
+
+        const duplicates = partArray.filter((part, i) => partArray.indexOf(part) !== i);
+        expect(duplicates).toEqual([]);
+    })
 })
