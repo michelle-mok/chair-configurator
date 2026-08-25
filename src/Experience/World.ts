@@ -49,7 +49,6 @@ export class World {
                     incoming.set(object.name as ChairPartName, object);
                     incomingDisposables.push(object.geometry);
                     const materials = Array.isArray(object.material) ? object.material : [object.material];
-                    console.log(materials);
                     for (const material of materials) 
                         incomingDisposables.push(material);
                 } else {

@@ -46,8 +46,8 @@ export class Experience {
                 this.world.applyConfiguration(this.store.getState());
                 this.unsubscribe = this.store.subscribe(() => {
                     this.world.applyConfiguration(this.store.getState());
-                })
-                callbacks.onLoadComplete?.()
+                });
+                callbacks.onLoadComplete?.();
 
             })
             .catch((error: unknown) => {

@@ -32,6 +32,20 @@ export class ConfiguratorStore {
         for (const listener of [...this.listeners]) listener();
     }
 
+    private notifyOnce(): void {
+        if(this.isNotifying) {
+            console.warn('ConfiguratorStore: State changed during notify; skipping re-notify');
+            return;
+        }
+
+        this.isNotifying = true;
+        try {
+            this.notify();
+        } finally {
+            this.isNotifying = false;
+        }
+    }
+
     select(categoryId: CategoryId, optionId: OptionId): void {
         const category = PRODUCT_CATEGORIES.find((c) => (c.id === categoryId));
         if (!category) throw new Error(`ConfiguratorStore: unknown category "${categoryId}"`);
@@ -39,17 +53,17 @@ export class ConfiguratorStore {
         if(!category.options.some((o) => o.id === optionId))
         throw new Error(`ConfiguratorStore: option "${optionId}" is not valid for "${categoryId}"`);
 
-        if (this.isNotifying) {
-            console.warn('ConfiguratorStore: select called during notify');
-            return;
-        }
         this.state[categoryId] = optionId;
-        this.isNotifying = true;
-        try {
-            this.notify();
-        } finally {
-            this.isNotifying = false;
+        this.notifyOnce();
+    }
+
+    reset(): void {
+        for (const category of PRODUCT_CATEGORIES) {
+            const defaultOption = category.options.find((o) => o.price === 0);
+            if(!defaultOption) continue;
+            this.state[category.id] = defaultOption.id;
         }
+        this.notifyOnce();
     }
 
     getPrice(): number {

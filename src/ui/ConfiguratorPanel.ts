@@ -10,9 +10,11 @@ export class ConfiguratorPanel {
     private readonly buttons = new Map<OptionId, HTMLButtonElement>();
     private readonly sections = new Map<CategoryId, HTMLDivElement>();
     private readonly priceElement: HTMLParagraphElement;
+    private readonly resetButton: HTMLButtonElement;
     private readonly store: ConfiguratorStore;
     private unsubscribe: (() => void) | null = null;
     private timeoutHandle: number | null = null;
+    private readonly reset: () => void;
 
     constructor(parent: HTMLElement, store: ConfiguratorStore) {
         this.store = store;
@@ -43,9 +45,17 @@ export class ConfiguratorPanel {
                 optionButton.addEventListener('click', selectOption);
             }
         }
+
         this.priceElement = document.createElement('p');
         this.priceElement.className = 'configurator-panel__price';
         this.root.appendChild(this.priceElement);
+
+        this.resetButton = document.createElement('button');
+        this.resetButton.className = 'configurator-panel__reset';
+        this.resetButton.textContent = 'RESET';
+        this.reset = () => store.reset();
+        this.resetButton.addEventListener('click', this.reset);
+        this.root.appendChild(this.resetButton);
 
         this.render();
         this.unsubscribe = store.subscribe(() => {
@@ -90,6 +100,7 @@ export class ConfiguratorPanel {
             clearTimeout(this.timeoutHandle);
             this.timeoutHandle = null;
         }
+        this.resetButton.removeEventListener('click', this.reset);
         this.root.remove();
     }
 }
