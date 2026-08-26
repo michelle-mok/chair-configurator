@@ -24,3 +24,5 @@ const configPanel = new ConfiguratorPanel(document.body, experience.store);
 
 new UrlSync(experience.store);
 
+document.title = `dpr ${window.devicePixelRatio} · ${window.innerWidth}x${window.innerHeight}`;
+
