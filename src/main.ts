@@ -1,3 +1,4 @@
+import './style.css';
 import { Experience } from "./Experience/Experience";
 import { LoadingOverlay } from "./ui/LoadingOverlay";
 import { ConfiguratorPanel } from "./ui/ConfiguratorPanel";
