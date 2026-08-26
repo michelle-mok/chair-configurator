@@ -10,10 +10,12 @@
         "format": "prettier --write .",
         "lint": "eslint .",
         "test": "vitest",
-        "test:run": "vitest run"
+        "test:run": "vitest run",
+        "optimize:model": "gltf-transform optimize public/models/SheenChair.glb public/models/SheenChair-opt.glb --compress draco --texture-compress webp"
     },
     "devDependencies": {
         "@eslint/js": "^10.0.1",
+        "@gltf-transform/cli": "^4.4.2",
         "eslint": "^10.8.1",
         "eslint-config-prettier": "^10.1.8",
         "globals": "^17.11.0",

@@ -6,8 +6,8 @@ import type { ConfiguratorState } from '../state/ConfiguratorStore';
 // roomEnvironment overexposes at 1.0
 const ENVIRONMENT_INTENSITY = 0.5;
 const BACKGROUND_COLOR = new THREE.Color(0xfaf9f6);
-const MODEL_URL = '/models/SheenChair.glb';
-const CHAIR_SHADOW_URL = '/textures/chair-shadow.png';
+const MODEL_URL = '/models/SheenChair-opt.glb';
+const CHAIR_SHADOW_URL = '/textures/chair-shadow-opt.png';
 const PLANE_SIZE = 3;
 const Y_OFFSET = 0.001;
 

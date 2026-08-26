@@ -22,5 +22,5 @@ const experience = new Experience(canvas, {
 
 const configPanel = new ConfiguratorPanel(document.body, experience.store);
 
-const urlSync = new UrlSync(experience.store);
+new UrlSync(experience.store);
 
