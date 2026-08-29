@@ -1,18 +1,35 @@
-* {
-    margin: 0;
-    padding: 0;
+*, *::before, *::after { box-sizing: border-box }
+
+* { margin: 0; }
+
+body { line-height: 1.5; }
+
+img, picture, video, canvas, svg { 
+  display: block;
+  max-width: 100%;
 }
 
-html,
-body {
-    overflow: hidden;
+input, button, textarea, select { font: inherit; }
+
+p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
+
+#app {
+    container-type: inline-size;
+    width: 100dvw;
+    height: 100dvh;
+}
+
+.configurator {
+    width: 100%;
+    height: 100%;
+    display: flex;
 }
 
 #webgl {
-    position: fixed;
-    top: 0;
-    left: 0;
+    flex-grow: 1;
+    display: block;
     outline: none;
+    min-width: 0;
 }
 
 .loading-overlay {
@@ -45,27 +62,26 @@ body {
 }
 
 .configurator-panel {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 260px;
-    height: 100%;
-    box-sizing: border-box;
-    padding: 24px 20px;
+    width: 25%;
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     gap: 24px;
+    padding: 24px 20px;
     background: #ffffff;
     border-left: 1px solid #e5e2dc;
     font-family: sans-serif;
     overflow-y: auto;
-    z-index: 5;
 }
 
 .configurator-panel__section {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    transition: background-color 400ms ease-out;
+    border-radius: 6px;
+    padding: 20px;
+    margin: -20px;
 }
 
 .configurator-panel__label {
@@ -81,7 +97,7 @@ body {
     border-radius: 50%;
     border: 2px solid transparent;
     cursor: pointer;
-    padding: 0;
+    flex-shrink: 0;
 }
 
 .configurator-panel__button--active {
@@ -93,15 +109,7 @@ body {
     font-size: 18px;
     color: #2c2a26;
 }
-
-.configurator-panel__section {
-/* ...existing rules... */
-    transition: background-color 400ms ease-out;
-    border-radius: 6px;
-    padding: 6px;
-    margin: -6px;
-}
-
+    
 .configurator-panel__section--focused {
     background-color: #f0ece4;
 }
@@ -114,4 +122,25 @@ body {
     border: #8a8378;
     color: #333;
     text-align: center;
+}
+
+.configurator-panel__swatches {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+@container (max-width: 640px) {
+    #webgl { min-height: 0; }
+    .configurator { flex-direction: column; }
+    .configurator-panel {
+        width: 100%;
+        max-height: 45dvh;
+        border-top: 1px solid black;
+    }
+    .configurator-panel__section {
+        padding: 10px;
+    }
+    
 }

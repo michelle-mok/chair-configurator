@@ -4,18 +4,22 @@ export class Sizes {
     width: number;
     height: number;
     pixelRatio: number;
+    private readonly canvas: HTMLCanvasElement;
     private readonly onResize: () => void;
     private readonly  sync = (): void => {
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
+        const rect = this.canvas.getBoundingClientRect();
+        this.width = rect.width;
+        this.height = rect.height;
         this.pixelRatio = Math.min(window.devicePixelRatio, PIXEL_RATIO_CAP);
 
         this.onResize();
     }
 
-    constructor(onResize: () => void) {
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
+    constructor(canvas: HTMLCanvasElement, onResize: () => void) {
+        this.canvas = canvas;
+        const rect = this.canvas.getBoundingClientRect();
+        this.width = rect.width;
+        this.height = rect.height;
         this.pixelRatio = Math.min(window.devicePixelRatio, PIXEL_RATIO_CAP);
         this.onResize = onResize;
 

@@ -33,13 +33,17 @@ export class ConfiguratorPanel {
             label.textContent = category.label;
             section.appendChild(label);
 
+            const swatchRow = document.createElement('div');
+            swatchRow.className = 'configurator-panel__swatches';
+            section.appendChild(swatchRow);
+
             for (const option of category.options) {
                 const optionButton = document.createElement('button');
                 optionButton.className = 'configurator-panel__button';
                 optionButton.style.backgroundColor = `#${option.color.toString(16).padStart(6, '0')}`;
                 optionButton.title = option.label;
                 optionButton.setAttribute('aria-label', option.label);
-                section.appendChild(optionButton);
+                swatchRow.appendChild(optionButton);
                 this.buttons.set(option.id, optionButton);
                 const selectOption = () => store.select(category.id, option.id);
                 optionButton.addEventListener('click', selectOption);

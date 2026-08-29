@@ -33,7 +33,7 @@ export class Experience {
     private unsubscribe: (() => void) | null = null;
 
     constructor(canvas: HTMLCanvasElement, callbacks: ExperienceCallbacks = {}) {
-        this.sizes = new Sizes(() => {
+        this.sizes = new Sizes(canvas, () => {
             this.camera.resize(this.sizes.width / this.sizes.height);
             this.renderer.resize(this.sizes);
         });

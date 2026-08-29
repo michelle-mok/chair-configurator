@@ -7,13 +7,13 @@ export class Renderer {
     constructor(canvas: HTMLCanvasElement, sizes: Sizes) {
         this.instance = new THREE.WebGLRenderer({ canvas });
         this.instance.setPixelRatio(sizes.pixelRatio);
-        this.instance.setSize(sizes.width, sizes.height);
+        this.instance.setSize(sizes.width, sizes.height, false);
         this.instance.toneMapping = THREE.ACESFilmicToneMapping;
     }
 
     resize(sizes: Sizes): void {
         this.instance.setPixelRatio(sizes.pixelRatio);
-        this.instance.setSize(sizes.width, sizes.height);
+        this.instance.setSize(sizes.width, sizes.height, false);
     }
 
     dispose(): void {
