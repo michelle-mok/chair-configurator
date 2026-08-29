@@ -5,6 +5,7 @@ export class Sizes {
     height: number;
     pixelRatio: number;
     private readonly canvas: HTMLCanvasElement;
+    private readonly observer: ResizeObserver;
     private readonly onResize: () => void;
     private readonly  sync = (): void => {
         const rect = this.canvas.getBoundingClientRect();
@@ -24,9 +25,15 @@ export class Sizes {
         this.onResize = onResize;
 
         window.addEventListener('resize', this.sync);
+
+        this.observer = new ResizeObserver(() => {
+            this.sync();
+        });
+        this.observer.observe(canvas);
     }
 
     dispose(): void {
+        this.observer.disconnect();
         window.removeEventListener('resize', this.sync);
     }
 }
