@@ -17,6 +17,7 @@ export interface ExperienceCallbacks {
     onLoadError?: (error: unknown) => void;
     onHoverPart?: (categoryId: CategoryId | null) => void;
     onSelectPart?: (categoryId: CategoryId) => void;
+    onFrame?: () => void;
 }
 
 export class Experience {
@@ -81,6 +82,7 @@ export class Experience {
             this.world.update(delta);
             this.controls.update();
             this.renderer.instance.render(this.world.instance, this.camera.instance);
+            callbacks.onFrame?.();
         })
     }
 
