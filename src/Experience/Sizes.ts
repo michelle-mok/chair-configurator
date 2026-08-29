@@ -1,4 +1,4 @@
-const PIXEL_RATIO_CAP = 2;
+const PIXEL_RATIO_CAP = 1.5;
 
 export class Sizes {
     width: number;
