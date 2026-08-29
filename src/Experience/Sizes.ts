@@ -24,8 +24,6 @@ export class Sizes {
         this.pixelRatio = Math.min(window.devicePixelRatio, PIXEL_RATIO_CAP);
         this.onResize = onResize;
 
-        window.addEventListener('resize', this.sync);
-
         this.observer = new ResizeObserver(() => {
             this.sync();
         });
@@ -34,6 +32,5 @@ export class Sizes {
 
     dispose(): void {
         this.observer.disconnect();
-        window.removeEventListener('resize', this.sync);
     }
 }
