@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { CHAIR_PART_NAMES, PRODUCT_CATEGORIES, type ChairPartName, type OptionId } from '../config/productConfig';
+import { CHAIR_PART_NAMES, PRODUCT_CATEGORIES, type CategoryId, type ChairPartName, type OptionId } from '../config/productConfig';
 import type { AssetLoader, ProgressCallback } from './AssetLoader';
 import type { ConfiguratorState } from '../state/ConfiguratorStore';
 
@@ -10,12 +10,15 @@ const MODEL_URL = '/models/SheenChair-opt.glb';
 const CHAIR_SHADOW_URL = '/textures/chair-shadow-opt.png';
 const PLANE_SIZE = 3;
 const Y_OFFSET = 0.001;
+const HIGHLIGHT_DURATION = 0.5;
+const HIGHLIGHT_INTENSITY = 0.15;
 
 export class World {
     readonly instance = new THREE.Scene();
     private readonly disposables: { dispose(): void }[] = [];
     private readonly partMap = new Map<ChairPartName, THREE.Mesh>();
     private readonly optionMaterials = new Map<OptionId, THREE.Material>();
+    private readonly highlightUniforms = new Map<OptionId, { value: number }>();
 
     constructor() {
         this.instance.environmentIntensity = ENVIRONMENT_INTENSITY;
@@ -74,6 +77,7 @@ export class World {
 
     private buildOptionMaterials(disposables: { dispose(): void }[]): void {
         this.optionMaterials.clear();
+        this.highlightUniforms.clear();
 
         for (const category of PRODUCT_CATEGORIES) {
             const mesh = this.partMap.get(category.part);
@@ -91,15 +95,46 @@ export class World {
                     material.sheenColor.set(option.color);
                 }
                 if('metalness' in option && 'metalness' in material) material.metalness = option.metalness; 
-                if('roughness' in option && 'roughness' in material) material.roughness = option.roughness; 
+                if('roughness' in option && 'roughness' in material) material.roughness = option.roughness;
+
+                const highlightUniform = { value: 0 }; 
+                this.highlightUniforms.set(option.id, highlightUniform);
+
+                material.onBeforeCompile = (shader) => {
+                    shader.uniforms.uHighlight = highlightUniform;
+
+                    shader.fragmentShader = shader.fragmentShader.replace(
+                        'void main() {',
+                        `uniform float uHighlight;
+
+                        const float HIGHLIGHT_INTENSITY = ${HIGHLIGHT_INTENSITY};
+                        
+                         void main() {`
+                    )
+
+                    shader.fragmentShader = shader.fragmentShader.replace(
+                        '#include <dithering_fragment>',
+                        `#include <dithering_fragment>
+                        gl_FragColor.rgb += uHighlight * HIGHLIGHT_INTENSITY;`
+                    );
+                } ;
                 this.optionMaterials.set(option.id, material);
                 disposables.push(material);
             }
         }
     }
 
-    update(_delta: number): void {
-        // contract kept for the conductor
+    update(delta: number): void {
+        for (const uniform of this.highlightUniforms.values()) {
+            if (uniform.value > 0) {
+                uniform.value = Math.max(0, uniform.value - delta / HIGHLIGHT_DURATION);
+            }
+        } 
+    }
+
+    highlightPart(optionId: OptionId): void {
+        const part = this.highlightUniforms.get(optionId);
+        if (part) part.value = 1;
     }
 
     setEnvironment(texture: THREE.Texture): void {

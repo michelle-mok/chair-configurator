@@ -65,6 +65,8 @@ export class Experience {
             (partName) => {
                 const categoryId = this.categoryForPart(partName);
                 if (categoryId) {
+                    const optionId = this.store.getState()[categoryId];
+                    this.world.highlightPart(optionId);
                     callbacks.onSelectPart?.(categoryId);
                 }
             }
