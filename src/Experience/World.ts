@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { CHAIR_PART_NAMES, PRODUCT_CATEGORIES, type CategoryId, type ChairPartName, type OptionId } from '../config/productConfig';
+import { CHAIR_PART_NAMES, PRODUCT_CATEGORIES, type ChairPartName, type OptionId } from '../config/productConfig';
 import type { AssetLoader, ProgressCallback } from './AssetLoader';
 import type { ConfiguratorState } from '../state/ConfiguratorStore';
 

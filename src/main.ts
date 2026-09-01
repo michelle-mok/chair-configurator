@@ -4,7 +4,6 @@ import { LoadingOverlay } from "./ui/LoadingOverlay";
 import { ConfiguratorPanel } from "./ui/ConfiguratorPanel";
 import { UrlSync } from "./ui/UrlSync";
 import Stats from 'stats.js';
-import { World } from './Experience/World';
 
 const container = document.querySelector<HTMLDivElement>('.configurator');
 if(!container) throw new Error('.configurator not found');
